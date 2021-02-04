@@ -1,9 +1,10 @@
-FROM python:3.7-alpine
+FROM arm64v8/python:3.7-alpine
 WORKDIR /app
 COPY *.py ./
 COPY run.sh ./
+ENV PYTHONWARNINGS='ignore:Unverified HTTPS request'
 
-RUN apk --no-cache add dnsmasq && pip install requests
+RUN pip install requests
+VOLUME /etc/hosts.d/
 
-EXPOSE 53 53/udp
 CMD ["./run.sh"]

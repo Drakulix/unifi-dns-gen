@@ -5,7 +5,7 @@ import sys
 
 import requests
 
-baseurl = os.environ.get('UNIFI_BASEURL', 'https://unifi:8443')
+baseurl = os.environ.get('UNIFI_BASEURL', 'https://udm')
 username = os.environ.get('UNIFI_USERNAME')
 password = os.environ.get('UNIFI_PASSWORD')
 site = os.environ.get('UNIFI_SITE', 'default')
@@ -14,14 +14,14 @@ fixed_only = os.environ.get('FIXED_ONLY', False)
 
 def get_configured_clients(session):
     # Get configured clients
-    r = session.get(f'{baseurl}/api/s/{site}/list/user', verify=False)
+    r = session.get(f'{baseurl}/proxy/network/api/s/{site}/list/user', verify=False)
     r.raise_for_status()
     return r.json()['data']
 
 
 def get_active_clients(session):
     # Get active clients
-    r = session.get(f'{baseurl}/api/s/{site}/stat/sta', verify=False)
+    r = session.get(f'{baseurl}/proxy/network/api/s/{site}/stat/sta', verify=False)
     r.raise_for_status()
     return r.json()['data']
 
@@ -29,7 +29,7 @@ def get_active_clients(session):
 def get_clients():
     s = requests.Session()
     # Log in to controller
-    r = s.post(f'{baseurl}/api/login', json={'username': username, 'password': password}, verify=False)
+    r = s.post(f'{baseurl}/api/auth/login', json={'username': username, 'password': password}, verify=False)
     r.raise_for_status()
     
     clients = {}
