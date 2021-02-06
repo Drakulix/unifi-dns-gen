@@ -25,4 +25,4 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: |
-            drakulix/unifi-dns-gen:latest 
+            ghcr.io/drakulix/unifi-dns-gen:latest 
