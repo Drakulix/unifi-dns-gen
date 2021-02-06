@@ -20,5 +20,5 @@ else
     -e UNIFI_USERNAME=${UNIFI_USERNAME} \
     -e UNIFI_PASSWORD=${UNIFI_PASSWORD} \
     -v "${HOSTS_DIR}:/etc/dnsmasq.d" \
-    docker.pkg.github.com/drakulix/unifi-dns-gen/unifi-dns-gen:latest
+    ghcr.io/drakulix/unifi-dns-gen:latest
 fi
