@@ -1,5 +1,5 @@
 #!/bin/sh
-hosts_dir=/etc/hosts.d
+hosts_dir=/hosts
 unifi_hosts=$hosts_dir/unifi.hosts
 
 while true; do

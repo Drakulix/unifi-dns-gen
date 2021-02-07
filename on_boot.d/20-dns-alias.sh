@@ -3,7 +3,7 @@
 CONTAINER=dns-gen
 HOSTS_DIR=/mnt/data/hosts
 
-UNIFI_BASEURL="https://setup.ui.com"
+UNIFI_BASEURL="https://127.0.0.1"
 UNIFI_USERNAME="REDACTED"
 UNIFI_PASSWORD="REDACTED"
 
@@ -15,10 +15,11 @@ fi
 if podman container exists ${CONTAINER}; then
   podman start ${CONTAINER}
 else
-  podman run --name ${CONTAINER} \
+  podman run --name ${CONTAINER} -d \
+    --net host \
     -e UNIFI_BASEURL=${UNIFI_BASEURL} \
     -e UNIFI_USERNAME=${UNIFI_USERNAME} \
     -e UNIFI_PASSWORD=${UNIFI_PASSWORD} \
-    -v "${HOSTS_DIR}:/etc/dnsmasq.d" \
+    -v "${HOSTS_DIR}:/hosts" \
     ghcr.io/drakulix/unifi-dns-gen:latest
 fi

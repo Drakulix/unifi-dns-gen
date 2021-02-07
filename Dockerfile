@@ -5,6 +5,6 @@ COPY run.sh ./
 ENV PYTHONWARNINGS='ignore:Unverified HTTPS request'
 
 RUN pip install requests
-VOLUME /etc/hosts.d/
+VOLUME /hosts
 
 CMD ["./run.sh"]
