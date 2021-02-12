@@ -21,7 +21,17 @@ It polls a UniFi controller and writes client aliases and IP addresses to a file
 * Make a folder to hold your host files: `mkdir /mnt/data/hosts`
 * Run: `podman run --name unifi-dns-gen -e UNIFI_BASEURL=https://192.168.1.1 -e UNIFI_USERNAME='REDACTED' -e UNIFI_PASSWORD='REDACTED' -e HOSTS_FILE="/hosts/unifi.hosts -v "/mnt/data/hosts:/hosts" -it --rm docker.pkg.github.com/drakulix/unifi-dns-gen/unifi-dns-gen:latest`
 * Add a file with `hostsdir=/mnt/data/hosts` as contents to `/run/dnsmasq.d`
-* Restart dnsmasq: `pkill dnsmasq` 
+* Restart dnsmasq: `pkill dnsmasq`
+
+| Env variable     | Description                                        | Required | Default |
+| ---------------- | -------------------------------------------------- | -------- | ------- |
+| `UNIFI_BASEURL`  | Url of the Unifi Controller @ you UDM              |      yes |         |
+| `UNIFI_USERNAME` | Username to log into your controller               |      yes |         |
+| `UNIFI_PASSWORD` | Password to log into your controller               |      yes |         |
+| `UNIFI_SITE`     | Site to enumerate                                  |       no | default |
+| `HOSTS_FILE`     | File to write host entries into                    |      yes |         |
+| `FIXED_ONLY`     | Only write out clients with fixed ip addresses     |       no | `False` |
+| `INTERVAL`       | Interval at which to poll controller (in seconds)  |       no |     60  |
 
 ## Persist
 
