@@ -5,6 +5,5 @@ COPY run.sh ./
 ENV PYTHONWARNINGS='ignore:Unverified HTTPS request'
 
 RUN pip install requests
-VOLUME /hosts
 
-CMD ["./run.sh"]
+CMD ["python3" "./get_unifi_reservations.py"]

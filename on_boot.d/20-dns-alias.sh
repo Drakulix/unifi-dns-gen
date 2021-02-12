@@ -20,6 +20,7 @@ else
     -e UNIFI_BASEURL=${UNIFI_BASEURL} \
     -e UNIFI_USERNAME=${UNIFI_USERNAME} \
     -e UNIFI_PASSWORD=${UNIFI_PASSWORD} \
+    -e HOSTS_FILE="/hosts/unifi.hosts"
     -v "${HOSTS_DIR}:/hosts" \
     ghcr.io/drakulix/unifi-dns-gen:latest
 fi

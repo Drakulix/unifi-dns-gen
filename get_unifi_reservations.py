@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import re
+import time
 import sys
 
 import requests
@@ -10,7 +11,10 @@ username = os.environ.get('UNIFI_USERNAME')
 password = os.environ.get('UNIFI_PASSWORD')
 site = os.environ.get('UNIFI_SITE', 'default')
 fixed_only = os.environ.get('FIXED_ONLY', False)
+interval = os.environ.get('INTERVAL', 60)
+hostsfile = os.environ.get("HOSTS_FILE")
 
+clients = {}
 
 def get_configured_clients(session):
     # Get configured clients
@@ -57,21 +61,28 @@ def get_clients(session):
 
 
 if __name__ == '__main__':
-    try:
-        s = requests.Session()
+    while True:
+        try:
+            with open(hostsfile, 'w') as f:
+                s = requests.Session()
 
-        # Log in to controller
-        r = s.post(f'{baseurl}/api/auth/login', json={'username': username, 'password': password}, verify=False)
-        r.raise_for_status()
+                # Log in to controller
+                r = s.post(f'{baseurl}/api/auth/login', json={'username': username, 'password': password}, verify=False)
+                r.raise_for_status()
 
-        networks = {net['_id']: net['domain_name'] for net in get_networks(s) if 'domain_name' in net}
-        for c in get_clients(s):
-            if 'network' in c and c['network'] in networks:
-                print(c['ip'], ' '.join(name + ' ' + name+"."+networks[c['network']] for name in c['names']), file=f)
-            else:
-                print(c['ip'], ' '.join(name for name in c['names']), file=f)
-    except requests.exceptions.ConnectionError as e:
-        print(f'Could not connect to unifi controller at {baseurl}', file=sys.stderr)
-        print(e, file=sys.stderr)
+                networks = {net['_id']: net['domain_name'] for net in get_networks(s) if 'domain_name' in net}
+                for c in get_clients(s):
+                    if 'network' in c and c['network'] in networks:
+                        print(c['ip'], ' '.join(name + ' ' + name+"."+networks[c['network']] for name in c['names']), file=f)
+                    else:
+                        print(c['ip'], ' '.join(name for name in c['names']), file=f)
+        except requests.exceptions.ConnectionError as e:
+            print(f'Could not connect to unifi controller at {baseurl}', file=sys.stderr)
+            print(e, file=sys.stderr)
+        except OSError as e:
+            print(f'Could not open file {hostsfile}', file=sys.stderr)
+            print(e, file=sys.stderr)
+            exit(1)
+        time.sleep(interval)
 
 
