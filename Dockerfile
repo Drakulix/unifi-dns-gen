@@ -5,4 +5,4 @@ ENV PYTHONWARNINGS='ignore:Unverified HTTPS request'
 
 RUN pip install requests
 
-CMD ["python3" "./get_unifi_reservations.py"]
+CMD python3 ./get_unifi_reservations.py
