@@ -11,7 +11,7 @@ username = os.environ.get('UNIFI_USERNAME')
 password = os.environ.get('UNIFI_PASSWORD')
 site = os.environ.get('UNIFI_SITE', 'default')
 fixed_only = os.environ.get('FIXED_ONLY', False)
-interval = os.environ.get('INTERVAL', 60)
+interval = int(os.environ.get('INTERVAL', 60))
 hostsfile = os.environ.get("HOSTS_FILE")
 
 clients = {}
