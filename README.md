@@ -19,7 +19,7 @@ It polls a UniFi controller and writes client aliases and IP addresses to a file
 
 * SSH into your Dream Machine
 * Make a folder to hold your host files: `mkdir /mnt/data/hosts`
-* Run: `podman run --name unifi-dns-gen -e UNIFI_BASEURL=https://192.168.1.1 -e UNIFI_USERNAME='REDACTED' -e UNIFI_PASSWORD='REDACTED' -e HOSTS_FILE="/hosts/unifi.hosts -v "/mnt/data/hosts:/hosts" -it --rm docker.pkg.github.com/drakulix/unifi-dns-gen/unifi-dns-gen:latest`
+* Run: `podman run --name unifi-dns-gen -e UNIFI_BASEURL=https://192.168.1.1 -e UNIFI_USERNAME='REDACTED' -e UNIFI_PASSWORD='REDACTED' -e HOSTS_FILE="/hosts/unifi.hosts -v "/mnt/data/hosts:/hosts" -it --rm ghcr.io/drakulix/unifi-dns-gen:latest`
 * Add a file with `hostsdir=/mnt/data/hosts` as contents to `/run/dnsmasq.d`
 * Restart dnsmasq: `pkill dnsmasq`
 
