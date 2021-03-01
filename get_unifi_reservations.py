@@ -3,6 +3,7 @@ import os
 import re
 import time
 import sys
+import json
 
 import requests
 
@@ -63,15 +64,16 @@ def get_clients(session):
 if __name__ == '__main__':
     while True:
         try:
+            s = requests.Session()
+
+            # Log in to controller
+            r = s.post(f'{baseurl}/api/auth/login', json={'username': username, 'password': password}, verify=False)
+            r.raise_for_status()
+
+            networks = {net['_id']: net['domain_name'] for net in get_networks(s) if 'domain_name' in net}
+            clients = get_clients(s)
             with open(hostsfile, 'w') as f:
-                s = requests.Session()
-
-                # Log in to controller
-                r = s.post(f'{baseurl}/api/auth/login', json={'username': username, 'password': password}, verify=False)
-                r.raise_for_status()
-
-                networks = {net['_id']: net['domain_name'] for net in get_networks(s) if 'domain_name' in net}
-                for c in get_clients(s):
+                for c in clients:
                     if 'network' in c and c['network'] in networks:
                         print(c['ip'], ' '.join(name + ' ' + name+"."+networks[c['network']] for name in c['names']), file=f)
                     else:
@@ -81,6 +83,10 @@ if __name__ == '__main__':
             print(e, file=sys.stderr)
         except OSError as e:
             print(f'Could not open file {hostsfile}', file=sys.stderr)
+            print(e, file=sys.stderr)
+            exit(1)
+        except json.decoder.JSONDecodeError as e:
+            print(f'Malformed response. Is the URL correct?', file=sys.stderr)
             print(e, file=sys.stderr)
             exit(1)
         time.sleep(interval)
