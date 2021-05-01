@@ -41,6 +41,11 @@ def get_clients(session):
     # Add clients with alias and reserved IP
     for c in get_configured_clients(s):
         if 'name' in c and 'fixed_ip' in c:
+            print("TEST:", c)
+            print("TEST:", c['fixed_ip'])
+            print("TEST:", c['name'])
+            print("TEST:", {'names': [c['name']], 'ip': c['fixed_ip']})
+            print("REUE:", clients)
             clients[c['fixed_ip']] = {'names': [c['name']], 'ip': c['fixed_ip']}
             if 'network_id' in c:
                 clients[c['fixed_ip']]['network'] = c['network_id']
@@ -71,9 +76,9 @@ if __name__ == '__main__':
             r.raise_for_status()
 
             networks = {net['_id']: net['domain_name'] for net in get_networks(s) if 'domain_name' in net}
-            clients = get_clients(s)
+            write_clients = get_clients(s)
             with open(hostsfile, 'w') as f:
-                for c in clients:
+                for c in write_clients:
                     if 'network' in c and c['network'] in networks:
                         print(c['ip'], ' '.join(name + ' ' + name+"."+networks[c['network']] for name in c['names']), file=f)
                     else:
